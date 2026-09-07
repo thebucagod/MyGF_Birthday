@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>С Днем Рождения!</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #f2f2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100dvh;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 500px;
+            height: 100dvh;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0,0,0,0.05);
+        }
+
+        /* ===================== */
+        /*    ЭКРАН ТАЙМЕРА      */
+        /* ===================== */
+        .timer-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .timer-screen h2 {
+            color: #1c1c1e;
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            line-height: 1.3;
+        }
+
+        #countdown {
+            font-size: 42px;
+            font-weight: 700;
+            color: #ff2d55;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-screen p {
+            color: #8e8e93;
+            font-size: 15px;
+        }
+
+        /* ===================== */
+        /*   ОБЩИЕ СТИЛИ СЛАЙДОВ */
+        /* ===================== */
+        .content-screen {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .content-screen.active {
+            display: flex;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .slide-content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .slide-content h2 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1c1c1e;
+            margin-bottom: 12px;
+        }
+
+        .slide-content p {
+            font-size: 17px;
+            color: #3a3a3c;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .highlight {
+            color: #ff2d55;
+            font-weight: 600;
+        }
+
+        /* ======================================== */
+        /*  СЛАЙД 1: ФОН НА ВСЮ ШИРИНУ             */
+        /* ======================================== */
+        #slide-1 {
+            position: relative;
+        }
+
+        #slide-1::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('love_bg.jpg') center/cover no-repeat;
+            z-index: 1;
+        }
+
+        #slide-1::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 0.8) 0%,
+                rgba(0, 0, 0, 0.4) 40%,
+                rgba(0, 0, 0, 0.1) 70%,
+                transparent 100%
+            );
+            z-index: 2;
+        }
+
+        #slide-1 .slide-content {
+            justify-content: flex-end;
+            padding: 30px 20px;
+            z-index: 3;
+        }
+
+        #slide-1 .slide-content h2 {
+            color: #ffffff;
+            font-size: 30px;
+            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.8);
+            margin-bottom: 16px;
+        }
+
+        #slide-1 .slide-content p {
+            color: #ffffff;
+            font-size: 16px;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
+            line-height: 1.6;
+        }
+
+        #slide-1 .nav-buttons {
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 4;
+            padding: 16px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        #slide-1 button {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #1c1c1e;
+        }
+
+        #slide-1 button:active {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        #slide-1 button:disabled {
+            background-color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ======================================== */
+        /*  СЛАЙДЫ С ФОТО: ФОН НА ВСЮ ШИРИНУ       */
+        /* ======================================== */
+        #slide-2, #slide-3, #slide-4 {
+            position: relative;
+        }
+
+        #slide-2::before, #slide-3::before, #slide-4::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        #slide-2::before { background-color: #ffe5ec; }
+        #slide-3::before { background-color: #ffd6e5; }
+        #slide-4::before { background-color: #fff0f5; }
+
+        /* ======================================== */
+        /*  ДЕКОРАТИВНЫЕ КОТИКИ (ПОВЕРХ ФОТО)      */
+        /* ======================================== */
+        .floating-cat {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 10; /* Поверх всего */
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-cat.cat-1 {
+            top: 8%;
+            left: 5%;
+            animation-delay: 0s;
+            font-size: 60px;
+        }
+
+        .floating-cat.cat-2 {
+            top: 15%;
+            right: 8%;
+            animation-delay: 1.5s;
+            font-size: 45px;
+        }
+
+        .floating-cat.cat-3 {
+            bottom: 25%;
+            left: 10%;
+            animation-delay: 3s;
+            font-size: 55px;
+        }
+
+        .floating-cat.cat-4 {
+            bottom: 15%;
+            right: 5%;
+            animation-delay: 4.5s;
+            font-size: 50px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-25px) rotate(5deg); }
+        }
+
+        /* ======================================== */
+        /*  ПЛАВАЮЩИЕ СЕРДЕЧКИ (ОПТИМИЗИРОВАНО)    */
+        /* ======================================== */
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 5; /* Поверх фото */
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 20px;
+            animation: heartFloat 12s ease-in infinite;
+            opacity: 0;
+        }
+
+        .content-screen:not(.active) .heart {
+            animation-play-state: paused;
+        }
+
+        .heart:nth-child(1) { left: 15%; animation-delay: 0s; }
+        .heart:nth-child(2) { left: 45%; animation-delay: 3s; font-size: 16px; }
+        .heart:nth-child(3) { left: 75%; animation-delay: 6s; font-size: 24px; }
+        .heart:nth-child(4) { left: 30%; animation-delay: 2s; font-size: 18px; }
+
+        @keyframes heartFloat {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ===================== */
+        /*  ГАЛЕРЕЯ              */
+        /* ===================== */
+        .gallery-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .gallery-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            max-height: 35vh;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-item p {
+            margin-top: 10px;
+            font-size: 15px;
+            color: #636366;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* ==================================== */
+        /*  СЛАЙД 4: ПАРОЛЬ                     */
+        /* ==================================== */
+        .password-container {
+            width: 100%;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .password-container h2 {
+            font-size: 22px;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .password-container .hint {
+            font-size: 14px;
+            color: #8e8e93;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .password-input {
+            width: 100%;
+            max-width: 320px;
+            padding: 14px 18px;
+            font-size: 17px;
+            border: 1.5px solid #d1d1d6;
+            border-radius: 12px;
+            background: #ffffff;
+            outline: none;
+            transition: all 0.2s;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .password-input:focus {
+            border-color: #ff2d55;
+            box-shadow: 0 0 0 4px rgba(255, 45, 85, 0.1);
+        }
+
+        .password-submit {
+            margin-top: 16px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .password-error {
+            display: none;
+            margin-top: 14px;
+            color: #ff3b30;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .password-error.show {
+            display: block;
+            animation: shake 0.4s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .password-success {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            padding: 20px;
+            align-items: center;
+        }
+
+        .password-success.show {
+            display: flex;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .password-success img {
+            width: 100%;
+            max-height: 28vh;
+            object-fit: cover;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ==================================== */
+        /*  СЛАЙД 5: ПРИГЛАШЕНИЕ С КНОПКОЙ     */
+        /* ==================================== */
+        #slide-5 {
+            position: relative;
+        }
+
+        #slide-5::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 1;
+        }
+
+        #slide-5 .slide-content {
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        #slide-5 .slide-content h2 {
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 24px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        #slide-5 .invitation-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 28px 24px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            margin-bottom: 24px;
+        }
+
+        #slide-5 .invitation-card h3 {
+            color: #764ba2;
+            font-size: 20px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        #slide-5 .invitation-card p {
+            color: #3a3a3c;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        #slide-5 .invitation-card .highlight {
+            color: #ff2d55;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        #slide-5 .invitation-card .details {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e5ea;
+            font-size: 15px;
+            color: #636366;
+        }
+
+        #slide-5 .invitation-card .details strong {
+            color: #1c1c1e;
+        }
+
+        .fancy-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff2d55 0%, #ff6b6b 100%);
+            color: white;
+            text-decoration: none;
+            padding: 18px 32px;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fancy-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .fancy-button:hover::before {
+            left: 100%;
+        }
+
+        .fancy-button:active {
+            transform: scale(0.96);
+            box-shadow: 0 2px 8px rgba(255, 45, 85, 0.3);
+        }
+
+        .fancy-button .emoji {
+            font-size: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* ===================== */
+        /*   КНОПКИ НАВИГАЦИИ    */
+        /* ===================== */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 16px 20px;
+            border-top: 1px solid #e5e5ea;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 3;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 20px;
+            font-size: 17px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background-color: #007aff;
+            color: white;
+            -webkit-tap-highlight-color: transparent;
+            font-family: inherit;
+        }
+
+        button:active {
+            transform: scale(0.96);
+            opacity: 0.8;
+        }
+
+        button:disabled {
+            background-color: #e5e5ea;
+            color: #8e8e93;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button.secondary {
+            background-color: #f2f2f7;
+            color: #007aff;
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+
+        <!-- ЭКРАН: ТАЙМЕР -->
+        <div id="timer-screen" class="timer-screen">
+            <h2>До открытия твоего подарка<br>осталось:</h2>
+            <div id="countdown">00д 00ч 00м 00с</div>
+            <p>Контент станет доступен 13 сентября в 00:00</p>
+        </div>
+
+        <!-- СЛАЙД 1: ПОЗДРАВЛЕНИЕ -->
+        <div id="slide-1" class="content-screen">
+            <div class="slide-content">
+                <h2>С Днем Рождения! 🎂</h2>
+                <p>Ты — самое лучшее, что случилось в моей жизни. Пусть этот день будет таким же прекрасным, как ты. Люблю тебя бесконечно.</p>
+            </div>
+            <div class="nav-buttons">
+                <button disabled>Назад</button>
+                <button onclick="nextSlide(1)">Далее →</button>
+            </div>
+        </div>
+
+        <!-- СЛАЙД 2: ГАЛЕРЕЯ 1 -->
+        <div id="slide-2" class="content-screen">
+            <div class="floating-hearts">
+                <div class="heart">💕</div>
+                <div class="heart">💖</div>
+                <div class="heart">💗</div>
+                <div class="heart">💝</div>
+            </div>
+            <div class="floating-cat cat-1">🐱</div>
+            <div class="floating-cat cat-2">😺</div>
+            <div class="floating-cat cat-3">😸</div>
+            <div class="floating-cat cat-4">🐾</div>
+            <div class="slide-content">
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="photo1.jpg" alt="Наше фото 1">
+                        <p>Помнишь этот день? Мы тогда...</p>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="photo2.jpg" alt="Наше фото 2">
+                        <p>А здесь мы такие счастливые 💕</p>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="secondary" onclick="prevSlide(2)">← Назад</button>
+                <button onclick="nextSlide(2)">Далее →</button>
+            </div>
+        </div>
+
+        <!-- СЛАЙД 3: ГАЛЕРЕЯ 2 -->
+        <div id="slide-3" class="content-screen">
+            <div class="floating-hearts">
+                <div class="heart">💕</div>
+                <div class="heart">💖</div>
+                <div class="heart">💗</div>
+                <div class="heart">💝</div>
+            </div>
+            <div class="floating-cat cat-1">😻</div>
+            <div class="floating-cat cat-2">🐱</div>
+            <div class="floating-cat cat-3">😽</div>
+            <div class="floating-cat cat-4">💖</div>
+            <div class="slide-content">
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="photo3.jpg" alt="Наше фото 3">
+                        <p>Этот момент я буду помнить всегда...</p>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="photo4.jpg" alt="Наше фото 4">
+                        <p>Моя любимая фотография с тобой 🥰</p>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="secondary" onclick="prevSlide(3)">← Назад</button>
+                <button onclick="nextSlide(3)">Далее →</button>
+            </div>
+        </div>
+
+        <!-- СЛАЙД 4: ПАРОЛЬ -->
+        <div id="slide-4" class="content-screen">
+            <div class="floating-hearts">
+                <div class="heart">💕</div>
+                <div class="heart">💖</div>
+                <div class="heart">💗</div>
+            </div>
+            <div class="floating-cat cat-2">🔐</div>
+            <div class="floating-cat cat-4">💌</div>
+            <div class="slide-content">
+                <div class="password-container" id="password-form">
+                    <h2>Подбери верный пароль<br>от моего сердца 🔐</h2>
+                    <p class="hint">(подсказка: это ты)</p>
+                    <input type="text" id="password-input" class="password-input" placeholder="Введи слово..." autocomplete="off">
+                    <button class="password-submit" onclick="checkPassword()">Открыть</button>
+                    <div class="password-error" id="password-error">Неверно 🙈 Попробуй ещё раз</div>
+                </div>
+
+                <div class="password-success" id="password-success">
+                    <img src="secret1.jpg" alt="Секретное фото 1">
+                    <img src="secret2.jpg" alt="Секретное фото 2">
+                    <img src="secret3.jpg" alt="Секретное фото 3">
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="secondary" onclick="prevSlide(4)">← Назад</button>
+                <button onclick="nextSlide(4)">Далее →</button>
+            </div>
+        </div>
+
+        <!-- СЛАЙД 5: ПРИГЛАШЕНИЕ -->
+        <div id="slide-5" class="content-screen">
+            <div class="slide-content">
+                <h2>✨ Тебя ждут!</h2>
+                <div class="invitation-card">
+                    <h3>Секретное свидание</h3>
+                    <p>Приглашаю тебя в</p>
+                    <p class="highlight">[Название ресторана]</p>
+                    <div class="details">
+                        <p><strong>📅 Когда:</strong> [Дата]</p>
+                        <p><strong>🕐 Во сколько:</strong> [Время]</p>
+                    </div>
+                    <p style="margin-top: 16px; font-size: 14px; color: #8e8e93; font-style: italic;">
+                        С меня — организация и бронь.<br>
+                        С тебя — хорошее настроение!
+                    </p>
+                </div>
+                
+                <a href="https://maps.apple.com/" class="fancy-button" target="_blank">
+                    <span class="emoji">📍</span>Открыть на карте
+                </a>
+            </div>
+            <div class="nav-buttons">
+                <button class="secondary" onclick="prevSlide(5)">← Назад</button>
+                <button onclick="restartSlides()">В начало</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const DEBUG_MODE = true;
+        const targetDate = new Date(2026, 8, 13, 0, 0, 0).getTime();
+
+        if (DEBUG_MODE) {
+            document.getElementById("timer-screen").style.display = "none";
+            document.getElementById("slide-1").classList.add("active");
+        } else {
+            const countdownFunction = setInterval(function() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    clearInterval(countdownFunction);
+                    document.getElementById("timer-screen").style.display = "none";
+                    document.getElementById("slide-1").classList.add("active");
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                const pad = (num) => String(num).padStart(2, '0');
+
+                document.getElementById("countdown").innerHTML =
+                    `${pad(days)}д ${pad(hours)}ч ${pad(minutes)}м ${pad(seconds)}с`;
+            }, 1000);
+        }
+
+        function nextSlide(current) {
+            document.getElementById("slide-" + current).classList.remove("active");
+            document.getElementById("slide-" + (current + 1)).classList.add("active");
+        }
+
+        function prevSlide(current) {
+            document.getElementById("slide-" + current).classList.remove("active");
+            document.getElementById("slide-" + (current - 1)).classList.add("active");
+        }
+
+        function restartSlides() {
+            document.querySelectorAll(".content-screen").forEach(slide => {
+                slide.classList.remove("active");
+            });
+            document.getElementById("slide-1").classList.add("active");
+        }
+
+        function checkPassword() {
+            const input = document.getElementById("password-input").value.toLowerCase().trim();
+            const errorEl = document.getElementById("password-error");
+            const formEl = document.getElementById("password-form");
+            const successEl = document.getElementById("password-success");
+
+            if (input === "котенок") {
+                errorEl.classList.remove("show");
+                formEl.style.display = "none";
+                successEl.classList.add("show");
+            } else {
+                errorEl.classList.remove("show");
+                void errorEl.offsetWidth;
+                errorEl.classList.add("show");
+            }
+        }
+
+        document.getElementById("password-input").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
