@@ -29,9 +29,6 @@
             box-shadow: 0 0 40px rgba(0,0,0,0.05);
         }
 
-        /* ===================== */
-        /*    ЭКРАН ТАЙМЕРА      */
-        /* ===================== */
         .timer-screen {
             display: flex;
             flex-direction: column;
@@ -64,9 +61,6 @@
             font-size: 15px;
         }
 
-        /* ===================== */
-        /*   ОБЩИЕ СТИЛИ СЛАЙДОВ */
-        /* ===================== */
         .content-screen {
             display: none;
             flex-direction: column;
@@ -117,9 +111,6 @@
             font-weight: 600;
         }
 
-        /* ======================================== */
-        /*  СЛАЙД 1: ФОН НА ВСЮ ШИРИНУ             */
-        /* ======================================== */
         #slide-1 {
             position: relative;
         }
@@ -188,9 +179,6 @@
             color: rgba(255, 255, 255, 0.6);
         }
 
-        /* ======================================== */
-        /*  СЛАЙДЫ С ФОТО: ФОН НА ВСЮ ШИРИНУ       */
-        /* ======================================== */
         #slide-2, #slide-3, #slide-4 {
             position: relative;
         }
@@ -206,15 +194,12 @@
         #slide-3::before { background-color: #ffd6e5; }
         #slide-4::before { background-color: #fff0f5; }
 
-        /* ======================================== */
-        /*  ДЕКОРАТИВНЫЕ КОТИКИ (ПОВЕРХ ФОТО)      */
-        /* ======================================== */
         .floating-cat {
             position: absolute;
             font-size: 50px;
             opacity: 0.5;
             pointer-events: none;
-            z-index: 10; /* Поверх всего */
+            z-index: 10;
             animation: float 6s ease-in-out infinite;
         }
 
@@ -251,9 +236,6 @@
             50% { transform: translateY(-25px) rotate(5deg); }
         }
 
-        /* ======================================== */
-        /*  ПЛАВАЮЩИЕ СЕРДЕЧКИ (ОПТИМИЗИРОВАНО)    */
-        /* ======================================== */
         .floating-hearts {
             position: absolute;
             top: 0;
@@ -261,7 +243,7 @@
             right: 0;
             bottom: 0;
             pointer-events: none;
-            z-index: 5; /* Поверх фото */
+            z-index: 5;
             overflow: hidden;
         }
 
@@ -299,9 +281,6 @@
             }
         }
 
-        /* ===================== */
-        /*  ГАЛЕРЕЯ              */
-        /* ===================== */
         .gallery-grid {
             display: flex;
             flex-direction: column;
@@ -332,9 +311,6 @@
             line-height: 1.4;
         }
 
-        /* ==================================== */
-        /*  СЛАЙД 4: ПАРОЛЬ                     */
-        /* ==================================== */
         .password-container {
             width: 100%;
             padding: 40px 20px;
@@ -404,7 +380,7 @@
         .password-success {
             display: none;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
             width: 100%;
             padding: 20px;
             align-items: center;
@@ -415,17 +391,86 @@
             animation: fadeIn 0.5s ease-out;
         }
 
-        .password-success img {
+        /* ==================================== */
+        /*  КОМПАКТНЫЕ ФОТО В СТОЛБЕЦ           */
+        /* ==================================== */
+        .compact-photo {
             width: 100%;
-            max-height: 28vh;
-            object-fit: cover;
+            max-width: 320px;
+            height: 18vh;
+            position: relative;
+            cursor: pointer;
             border-radius: 14px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            transition: transform 0.2s;
+        }
+
+        .compact-photo:active {
+            transform: scale(0.96);
+        }
+
+        .compact-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .compact-photo .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s;
+        }
+
+        .compact-photo .photo-overlay img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
         }
 
         /* ==================================== */
-        /*  СЛАЙД 5: ПРИГЛАШЕНИЕ С КНОПКОЙ     */
+        /*  МОДАЛЬНОЕ ОКНО ДЛЯ БОЛЬШОГО ФОТО    */
         /* ==================================== */
+        .photo-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .photo-modal.active {
+            display: flex;
+        }
+
+        .photo-modal img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .photo-modal .close-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            text-align: center;
+        }
+
         #slide-5 {
             position: relative;
         }
@@ -539,9 +584,6 @@
             vertical-align: middle;
         }
 
-        /* ===================== */
-        /*   КНОПКИ НАВИГАЦИИ    */
-        /* ===================== */
         .nav-buttons {
             display: flex;
             justify-content: space-between;
@@ -591,14 +633,12 @@
 <body>
     <div class="card-container">
 
-        <!-- ЭКРАН: ТАЙМЕР -->
         <div id="timer-screen" class="timer-screen">
             <h2>До открытия твоего подарка<br>осталось:</h2>
             <div id="countdown">00д 00ч 00м 00с</div>
             <p>Контент станет доступен 13 сентября в 00:00</p>
         </div>
 
-        <!-- СЛАЙД 1: ПОЗДРАВЛЕНИЕ -->
         <div id="slide-1" class="content-screen">
             <div class="slide-content">
                 <h2>С Днем Рождения! 🎂</h2>
@@ -610,7 +650,6 @@
             </div>
         </div>
 
-        <!-- СЛАЙД 2: ГАЛЕРЕЯ 1 -->
         <div id="slide-2" class="content-screen">
             <div class="floating-hearts">
                 <div class="heart">💕</div>
@@ -626,11 +665,11 @@
                 <div class="gallery-grid">
                     <div class="gallery-item">
                         <img src="photo1.jpg" alt="Наше фото 1">
-                        <p>Помнишь этот день? Мы тогда...</p>
+                        <p>Самая горячая блондинка &#129397;</p>
                     </div>
                     <div class="gallery-item">
                         <img src="photo2.jpg" alt="Наше фото 2">
-                        <p>А здесь мы такие счастливые 💕</p>
+                        <p>Смешнявка, умиляюсь <br>при виде такой милоты 💕</p>
                     </div>
                 </div>
             </div>
@@ -640,7 +679,6 @@
             </div>
         </div>
 
-        <!-- СЛАЙД 3: ГАЛЕРЕЯ 2 -->
         <div id="slide-3" class="content-screen">
             <div class="floating-hearts">
                 <div class="heart">💕</div>
@@ -656,7 +694,7 @@
                 <div class="gallery-grid">
                     <div class="gallery-item">
                         <img src="photo3.jpg" alt="Наше фото 3">
-                        <p>Этот момент я буду помнить всегда...</p>
+                        <p>Как я счастлив наблюдать такое каждую ночь &#129402;&#128164;</p>
                     </div>
                     <div class="gallery-item">
                         <img src="photo4.jpg" alt="Наше фото 4">
@@ -670,7 +708,6 @@
             </div>
         </div>
 
-        <!-- СЛАЙД 4: ПАРОЛЬ -->
         <div id="slide-4" class="content-screen">
             <div class="floating-hearts">
                 <div class="heart">💕</div>
@@ -689,9 +726,25 @@
                 </div>
 
                 <div class="password-success" id="password-success">
-                    <img src="secret1.jpg" alt="Секретное фото 1">
-                    <img src="secret2.jpg" alt="Секретное фото 2">
-                    <img src="secret3.jpg" alt="Секретное фото 3">
+                    <!-- Три фото в столбец, компактные -->
+                    <div class="compact-photo" onclick="openPhotoModal('secret1.jpg')">
+                        <img src="secret1.jpg" alt="Секретное фото 1">
+                        <div class="photo-overlay">
+                            <img src="finger-tap.svg" alt="Нажми на меня">
+                        </div>
+                    </div>
+                    <div class="compact-photo" onclick="openPhotoModal('secret2.jpg')">
+                        <img src="secret2.jpg" alt="Секретное фото 2">
+                        <div class="photo-overlay">
+                            <img src="finger-tap.svg" alt="Нажми на меня">
+                        </div>
+                    </div>
+                    <div class="compact-photo" onclick="openPhotoModal('secret3.jpg')">
+                        <img src="secret3.jpg" alt="Секретное фото 3">
+                        <div class="photo-overlay">
+                            <img src="finger-tap.svg" alt="Нажми на меня">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="nav-buttons">
@@ -700,7 +753,6 @@
             </div>
         </div>
 
-        <!-- СЛАЙД 5: ПРИГЛАШЕНИЕ -->
         <div id="slide-5" class="content-screen">
             <div class="slide-content">
                 <h2>✨ Тебя ждут!</h2>
@@ -709,8 +761,8 @@
                     <p>Приглашаю тебя в</p>
                     <p class="highlight">[Название ресторана]</p>
                     <div class="details">
-                        <p><strong>📅 Когда:</strong> [Дата]</p>
-                        <p><strong>🕐 Во сколько:</strong> [Время]</p>
+                        <p><strong>📅 Когда:</strong> 13.09.2026</p>
+                        <p><strong>🕐 Во сколько:</strong> 17:00</p>
                     </div>
                     <p style="margin-top: 16px; font-size: 14px; color: #8e8e93; font-style: italic;">
                         С меня — организация и бронь.<br>
@@ -728,6 +780,12 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Модальное окно для просмотра фото -->
+    <div class="photo-modal" id="photoModal" onclick="closePhotoModal()">
+        <img id="modalImage" src="" alt="Большое фото">
+        <div class="close-hint">Нажмите, чтобы закрыть</div>
     </div>
 
     <script>
@@ -799,6 +857,18 @@
                 checkPassword();
             }
         });
+
+        function openPhotoModal(imageSrc) {
+            const modal = document.getElementById("photoModal");
+            const modalImg = document.getElementById("modalImage");
+            modalImg.src = imageSrc;
+            modal.classList.add("active");
+        }
+
+        function closePhotoModal() {
+            const modal = document.getElementById("photoModal");
+            modal.classList.remove("active");
+        }
     </script>
 </body>
 </html>
