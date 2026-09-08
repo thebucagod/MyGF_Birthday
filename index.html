@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>С Днем Рождения!</title>
+
+    <!-- Иконка сайта -->
+    <link rel="icon" type="image/png" href="favicon.jpg">
+    <link rel="apple-touch-icon" href="apple-touch-icon.jpg">
+
+    <!-- Open Graph теги для красивого превью в мессенджерах -->
+    <meta property="og:title" content="С Днем Рождения! 🎂">
+    <meta property="og:description" content="У меня для тебя сюрприз...">
+    <meta property="og:image" content="preview.gif">
+    <meta property="og:type" content="website">
+
+    <!-- Для Telegram -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="preview.jpg">
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -789,7 +804,7 @@
     </div>
 
     <script>
-        const DEBUG_MODE = true;
+        const DEBUG_MODE = false;
         const targetDate = new Date(2026, 8, 13, 0, 0, 0).getTime();
 
         if (DEBUG_MODE) {
